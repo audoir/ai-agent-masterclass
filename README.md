@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Agent Masterclass
+
+> **Prerequisites:** This project is a continuation of the [Advanced AI Agent Tutorial](https://github.com/audoir/advanced-ai-tutorial), which covers multi-agent systems, observability with OpenTelemetry, evals, agent topics, and data pipelines. Complete that tutorial first before proceeding here.
+
+A hands-on Next.js project for building on top of advanced AI agent concepts.
 
 ## Getting Started
 
-First, run the development server:
-
-```bash
+```
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+> **Note:** You need an `OPENAI_API_KEY` environment variable set. Create a `.env.local` file:
+>
+> ```
+> OPENAI_API_KEY=sk-...
+> ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Chapters
 
-To learn more about Next.js, take a look at the following resources:
+| Chapter | Description |
+|---------|-------------|
+| [Chapter 1 — Multi-Agent System](docs/chapter-01-multi-agent-system.md) | Recap of the Orchestrator + SubAgents system with agent topics — the foundation this project builds on |
+| [Chapter 2 — Long-Term Memory](docs/chapter-02-long-term-memory.md) | Episodic and semantic memory agents that persist user preferences across sessions and inject them into the Orchestrator's system prompt |
+| [Chapter 3 — Swarm](docs/chapter-03-swarm.md) | A different multi-agent architecture where agents can hand off to each other directly |
+| [Chapter 4 — State Checkpointing](docs/chapter-04-checkpointing.md) | Snapshot conversation state before every step, roll back to any checkpoint, and re-run the pipeline with a new prompt — time travel debugging for AI agents |
+| [Chapter 5 — Human-in-the-Loop](docs/chapter-05-hitl.md) | HITL for a database mutation pipeline — INSERT executes immediately, UPDATE/DELETE require explicit human approval via a two-turn confirmation flow |
+| [Chapter 6 — Conclusion](docs/chapter-06-conclusion.md) | Key lessons from the project — long-term memory, why to prefer Orchestrators over swarms, checkpointing, HITL, stateless architecture, and a practical guide to building agentic systems |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## What's Included
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Tab | Description |
+|-----|-------------|
+| 🗄️ View Database | Browse the in-memory SQLite database — inventory, customers, sales, users, sessions, agent topics, and the agent registry |
+| 🤖 Orchestrator | An Orchestrator Agent that delegates to 3 specialist agents (Researcher → Writer → Editor) via MCP tool calls, with outputs persisted as named topics in the database |
+| 🐝 Swarm Agents | A swarm of autonomous agents (Researcher, Writer, Editor) that hand off control to each other directly — no central orchestrator |
+| 🔖 Checkpoints | State checkpointing with time travel debugging — stop a run mid-pipeline, roll back to any step, and rerun with a new prompt |
+| 🧑‍💻 HITL | Human-in-the-Loop database mutations — INSERT executes immediately, UPDATE/DELETE require explicit human approval before executing |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Key Dependencies
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Package | Purpose |
+|---------|---------|
+| `ai` | Vercel AI SDK — `generateText`, `streamText` |
+| `@ai-sdk/openai` | OpenAI provider |
+| `@ai-sdk/react` | React hooks — `useCompletion` |
+| `@ai-sdk/mcp` | MCP client for the AI SDK |
+| `mcp-handler` | MCP server handler for Next.js |
+| `@modelcontextprotocol/sdk` | Official MCP TypeScript SDK |
+| `better-sqlite3` | Synchronous SQLite driver |
+| `zod` | Schema validation for tool inputs |
